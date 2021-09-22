@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerInfo : MonoBehaviour
 {
-    public int IMoney = 0;
-    public int ICash = 0;
+    public int iMoney = 0;
+    public int iCash = 0;
     public Inventory CInventory = null;
     public Dictionary<int, StageInfo> dicClearStage= new Dictionary<int, StageInfo>();
 
