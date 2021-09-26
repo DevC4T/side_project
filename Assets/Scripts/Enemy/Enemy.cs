@@ -4,7 +4,10 @@ using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour
 {
+    public int iFieldUnique;
     public int iEnemyNumber;
-    public abstract void EnemySetting();
+    public int iHealthPoint;
+    public int iAttackDamage;
+    public abstract void EnemySetting(int iFieldUnique, CreateEnemyInfo variableValue);
 
 }

@@ -53,9 +53,11 @@
     <UnityVersion>2019.4.30f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Define.cs" />
     <Compile Include="Assets\Scripts\Enemy\CreateEnemyInfo.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyFactory.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Enemy\TestEnemy.cs" />
     <Compile Include="Assets\Scripts\GameInfo.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />

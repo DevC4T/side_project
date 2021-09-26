@@ -7,11 +7,15 @@ public class GameInfo : MonoBehaviour
 
     void FindEnemy()
     {
-        var Enemys = GetComponents(typeof(EnemyFactory));
+        var EnemyCreateInfos = GetComponentsInChildren(typeof(CreateEnemyInfo));
 
-        foreach (EnemyFactory data in Enemys)
+        foreach (CreateEnemyInfo data in EnemyCreateInfos)
         {
-            data.CreateEnemy();
+            var createdEnemy = data.CreateEnemy();
+            if(createdEnemy != null)
+            {
+                //리스트에 추가..
+            }
         }
 
     }
