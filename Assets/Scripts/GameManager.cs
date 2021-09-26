@@ -5,6 +5,11 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.U2D;
 
+public enum sceneState
+{
+    SS_MENU,
+    SS_GAME,
+}
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -50,30 +55,25 @@ public class GameManager : MonoSingleton<GameManager>
     {
         MasterVolume = volumeSliders[0].value;
         Debug.Log(MasterVolume);
-        PlayerPrefs.SetFloat("MasterVolume", MasterVolume);
         //GetComponent<AudioSource>().volume = MasterVolume * MusicVolume * 100;
     }
     public void SetMusicVolume()
     {
         MusicVolume = volumeSliders[1].value;
         Debug.Log(MusicVolume);
-        PlayerPrefs.SetFloat("MusicVolume", MusicVolume);
         //GetComponent<AudioSource>().volume = MasterVolume * MusicVolume * 100;
     }
     public void SetSfxVolume()
     {
         SfxVolume = volumeSliders[2].value;
         Debug.Log(SfxVolume);
-        PlayerPrefs.SetFloat("SfxVolume", SfxVolume);
     }
     public void PlayMusic()
     {
-        AudioSource audioSource = GetComponent<AudioSource>();
         //sceneIndex = (sceneState)SceneManager.GetActiveScene().buildIndex;
-        audioSource.clip = bgms[(int)0];
-        audioSource.volume = MasterVolume * MusicVolume * 100;
-        if(audioSource.isPlaying == false)
-        audioSource.Play();
+        GetComponent<AudioSource>().clip = bgms[(int)0];
+        GetComponent<AudioSource>().volume = MasterVolume * MusicVolume * 100;
+        GetComponent<AudioSource>().Play();
     }
 
 
@@ -82,22 +82,49 @@ public class GameManager : MonoSingleton<GameManager>
     {
         //1초 뒤 실행
         //Invoke("GameStart", 1f);   
-        MasterVolume = PlayerPrefs.GetFloat("MasterVolume",1f);
-        MusicVolume = PlayerPrefs.GetFloat("MusicVolume",1f);
-        SfxVolume = PlayerPrefs.GetFloat("SfxVolume",1f);
-
-        volumeSliders[0].value = MasterVolume;
-        volumeSliders[1].value = MusicVolume;
-        volumeSliders[2].value = sfxVolumePercent;
+        foreach (var item in volumeSliders)
+        {
+            item.value = 1f;
+        }
 
         PlayMusic();
-
-        DontDestroyOnLoad(this);
     }
 
     void Update()
     {
         GetComponent<AudioSource>().volume = MasterVolume * MusicVolume;
+    }
+
+    void GameStart()
+    {
+        // 볼륨 기본 max 설정 
+        foreach (var item in volumeSliders)
+        {
+            item.value = 1f;
+        }
+       
+        // 전원절약에 대한 설정을 나타내며, 사용자의 입력이 멈춘 시간으로부터 일정시간 후에 화면을 끄는 기능을 허용합니다. 
+        // Disable screen dimming
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        //StartCoroutine(UpdateProcess());         
+    }
+
+    public IEnumerator UpdateProcess()
+    {
+        //게임매니저 자체를 싱글톤 (+ dontdistroy obj) 상속해놨음. 
+        //DontDestroyOnLoad(this.gameObject);
+        yield return null;
+
+        //SceneManager.LoadScene("InGameScene");
+        //yield return null;
+        //게임물 등급 화면     
+        //yield return StartCoroutine(GameRatingScreenStart());
+        //GameRatingScreen.SetActive(false);
+
+        //동영상 상영!!!!
+        //yield return videoCoroutine = StartCoroutine(OpeningVideo());
+        //동영상 상영후 진행
+        //OpeningVideo_End();
     }
 
     public Sprite GetSprite(string strKey)
@@ -114,10 +141,5 @@ public class GameManager : MonoSingleton<GameManager>
 
             return tempSprite;
         }
-    }
-    public void LoadScene(int sceneIndex)
-    {
-        SceneIndex sceneNum = (SceneIndex)sceneIndex;
-        LoadingSceneController.LoadScene(sceneNum.ToString());
     }
 }
